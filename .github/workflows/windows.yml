@@ -1,0 +1,83 @@
+# Builds a portable Windows build (zip with notesapp.exe + all DLLs).
+# Experimental side build; not part of the Linux release pipeline.
+name: Windows build
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: UCRT64
+          update: true
+          install: >-
+            zip
+          pacboy: >-
+            gcc:p
+            cmake:p
+            ninja:p
+            pkgconf:p
+            qt6-base:p
+            qt6-svg:p
+            qt6-networkauth:p
+            qt6-tools:p
+            qtkeychain-qt6:p
+            sqlcipher:p
+            libsodium:p
+
+      - name: Configure
+        # WIN32_EXECUTABLE: GUI app, no console window behind it.
+        run: >-
+          cmake -S . -B build -G Ninja
+          -DCMAKE_BUILD_TYPE=Release
+          -DNOTES_ENABLE_TESTS=OFF
+          -DCMAKE_WIN32_EXECUTABLE=ON
+
+      - name: Build
+        run: cmake --build build --parallel
+
+      - name: Bundle
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          cp build/src/notesapp.exe dist/
+
+          # Qt DLLs, platform/style/TLS/image plugins.
+          deploy=$(command -v windeployqt6 || command -v windeployqt || find /ucrt64 -name 'windeployqt*.exe' | head -n1)
+          "$deploy" --release --no-translations --no-system-d3d-compiler --no-opengl-sw dist/notesapp.exe
+
+          # Everything else (SQLCipher, libsodium, QtKeychain, libstdc++, ICU, ...).
+          # Repeat until no new DLLs appear, since plugins pull in their own deps.
+          while :; do
+            before=$(find dist -iname '*.dll' | wc -l)
+            find dist -iname '*.exe' -o -iname '*.dll' | while read -r f; do
+              ldd "$f" | awk '{print $3}' | grep -i '^/ucrt64/' || true
+            done | sort -u | while read -r dll; do
+              [ -e "dist/$(basename "$dll")" ] || cp "$dll" dist/
+            done
+            after=$(find dist -iname '*.dll' | wc -l)
+            [ "$before" -eq "$after" ] && break
+          done
+
+          ls -R dist
+
+      - name: Smoke test
+        # The exe must at least load all its DLLs; --version-style flags aren't
+        # guaranteed, so just check ldd finds nothing missing.
+        run: |
+          ! ldd dist/notesapp.exe | grep -i 'not found'
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: notesapp-windows-x64
+          path: dist/
