@@ -182,7 +182,7 @@ MainWindow::MainWindow(app::AppContext& context, QWidget* parent)
     m_splitter->addWidget(m_sidebar);
     m_splitter->addWidget(m_noteList);
     m_splitter->addWidget(m_editor);
-    // Resizing the window only changes the editor's width, as in macOS Notes.
+    // Resizing the window only changes the editor's width.
     m_splitter->setStretchFactor(kSidebarIndex, 0);
     m_splitter->setStretchFactor(kNoteListIndex, 0);
     m_splitter->setStretchFactor(kEditorIndex, 1);
@@ -277,7 +277,7 @@ void MainWindow::createToolBar()
     toolBar->toggleViewAction()->setVisible(false);
     toolBar->setIconSize(QSize(kToolBarIconSize, kToolBarIconSize));
 
-    // macOS-style groups of joined buttons (Plan §3.1): layout, view mode and
+    // Groups of joined buttons (Plan §3.1): layout, view mode and
     // delete on the left; new note beside the editing tools in the middle, apart
     // from delete so a slip can't hit the wrong one; share and search on the
     // right. Order within and across groups is Plan §3.2's.
@@ -341,7 +341,7 @@ void MainWindow::createToolBar()
     m_searchField->setObjectName(QStringLiteral("searchField"));
     m_searchField->setToolTip(m_actions->action(ActionId::SearchAllNotes)->toolTip());
     m_searchField->setFixedWidth(kSearchFieldWidth);
-    // As tall as the button groups beside it (macOS Notes). Polished first, so
+    // As tall as the button groups beside it. Polished first, so
     // the group's size includes the style sheet's padding and border.
     if (auto* group = toolBar->findChild<QFrame*>(QStringLiteral("toolGroup"))) {
         group->ensurePolished();
@@ -504,7 +504,7 @@ void MainWindow::openNote(qint64 noteId)
                 m_editor->textEdit()->setFocus(Qt::OtherFocusReason);
             }
             if (note.isTrashed()) {
-                // Read-only in Recently Deleted, as in macOS Notes: recover it to edit.
+                // Read-only in Recently Deleted: recover it to edit.
                 m_editor->textEdit()->setReadOnly(true);
                 updateFormatMenu();
                 return;
@@ -529,7 +529,7 @@ void MainWindow::deleteCurrentNote()
         deletePermanently(*note);
         return;
     }
-    // The first time, say where deleted notes go (macOS Notes). Escape there
+    // The first time, say where deleted notes go. Escape there
     // deletes nothing, and the notice comes again next time.
     QSettings& settings = m_context.settings();
     if (!settings.value(kTrashNoticeShownKey, false).toBool()) {

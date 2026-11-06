@@ -258,7 +258,7 @@ public:
 
 } // namespace
 
-// As in macOS Notes: the inline formats as a row of buttons on top, then
+// The inline formats as a row of buttons on top, then
 // each style in its own look and the lists with their markers; no shortcuts
 // or access keys there. The menu bar's Format menu stays plain.
 void tst_ParagraphStyles::aaMenuLooksLikeMacNotes()
@@ -492,7 +492,7 @@ void tst_ParagraphStyles::enterInCodeBlockAddsCodeLines()
     QCOMPARE(m_edit->toPlainText(), QStringLiteral("Trip\nPacking\nPassport\n\n"));
 }
 
-// As in macOS Notes: a new paragraph after a heading is Body; inside a
+// A new paragraph after a heading is Body; inside a
 // heading, Enter splits it and both halves stay headings.
 void tst_ParagraphStyles::enterAfterHeadingContinuesInBody()
 {

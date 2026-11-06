@@ -186,7 +186,7 @@ void tst_NoteListView::spaceUnderLastNote()
     QCOMPARE(m_view->height() - 1 - lastBottom, notes::ui::NoteListView::kBottomPadding);
 }
 
-// UI review (as macOS Notes): notes start further right than the section
+// UI review: notes start further right than the section
 // header above them, so the headers stand out; the header stays where it was.
 void tst_NoteListView::notesIndentedFromHeaders()
 {

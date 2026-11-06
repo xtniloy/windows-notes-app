@@ -323,7 +323,7 @@ QString NoteListModel::timeTextOf(const NoteSummary& note) const
 
 QString NoteListModel::daysRemainingText(qint64 trashedAtMs, qint64 nowMs)
 {
-    // Rounded up: a note purged in 2.5 days shows "3 days", like macOS Notes.
+    // Rounded up: a note purged in 2.5 days shows "3 days".
     constexpr qint64 kDayMs = std::chrono::milliseconds(std::chrono::days(1)).count();
     const qint64 left = trashedAtMs + storage::NoteRepository::kTrashRetention.count() - nowMs;
     const qint64 days = std::max<qint64>(0, (left + kDayMs - 1) / kDayMs);

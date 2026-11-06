@@ -11,7 +11,7 @@ class QVBoxLayout;
 
 namespace notes::ui {
 
-// A short message with a choice, as macOS Notes' alerts: the app logo, a bold
+// A short message with a choice: the app logo, a bold
 // title, a line of explanation and a row of full-width buttons, on a rounded,
 // shadowed panel without a title bar, centered over its parent. Used for the
 // first-delete notice, deleting a note permanently, and deleting, creating and

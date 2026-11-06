@@ -1,6 +1,6 @@
 # Notes (working name)
 
-A native Ubuntu notes app with the layout and workflow of macOS Notes, encrypted by default.
+A native Ubuntu notes app with a clean three-pane layout, encrypted by default.
 C++20 · Qt 6 Widgets · SQLCipher · libsodium.
 
 - [Project plan](notebook-project-plan.md): features, architecture, security design
@@ -12,7 +12,7 @@ C++20 · Qt 6 Widgets · SQLCipher · libsodium.
 
 ## Naming
 
-The name users see is `NOTES_DISPLAY_NAME` in the top-level `CMakeLists.txt` (currently "Notes", a placeholder that can't ship: GNOME and Apple both have apps called Notes). Change it any time.
+The name users see is `NOTES_DISPLAY_NAME` in the top-level `CMakeLists.txt` (currently "Notes", a placeholder that can't ship: other platforms already ship apps called Notes). Change it any time.
 
 Never change `NOTES_APP_ID`, `NOTES_STORAGE_NAME` or `NOTES_ORG_*` once people have data: they decide where settings, notes and keyring entries live. `tst_appcontext` fails if they change.
 

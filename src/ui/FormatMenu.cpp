@@ -27,7 +27,7 @@ struct StyleSpec
     QKeyCombination shortcut;
 };
 
-// macOS Notes' shortcuts, with Ctrl for Cmd. None clashes with the app's
+// The paragraph style shortcuts. None clashes with the app's
 // other shortcuts (Ctrl+Shift+L checklist, +A attach, +N new folder).
 constexpr std::array<StyleSpec, 8> kStyles{{
     {.style = ParagraphStyle::Title,
@@ -85,7 +85,7 @@ struct InlineSpec
     char glyph = 0; // the button's letter, drawn in the format
 };
 
-// The usual shortcuts; Strikethrough as macOS (Shift+Cmd+X).
+// The usual shortcuts; Strikethrough on Ctrl+Shift+X.
 constexpr std::array<InlineSpec, 4> kInlineStyles{{
     {.style = InlineStyle::Bold,
      .objectName = "boldAction",
@@ -197,7 +197,7 @@ FormatMenu::FormatMenu(QWidget* parent)
     setProperty(AppStyle::kExtraItemPaddingProperty, kExtraItemPadding);
     setContentsMargins(0, 0, 0, kBottomMargin);
 
-    // The inline formats: a row of buttons, as in macOS Notes.
+    // The inline formats: a row of buttons.
     auto* row = new QWidget(this);
     row->setObjectName(QStringLiteral("formatInlineRow"));
     auto* rowLayout = new QHBoxLayout(row);

@@ -6,7 +6,7 @@ class QAction;
 
 namespace notes::ui {
 
-// The toolbar's search box (task 1.9). Like macOS Notes, the magnifier and
+// The toolbar's search box (task 1.9). The magnifier and
 // "Search" sit in the middle while the box is empty and unfocused; on focus or
 // typing they move to the usual left-aligned place.
 class SearchField : public QLineEdit

@@ -149,7 +149,7 @@ void tst_RecentlyDeleted::deleteMovesNoteToRecentlyDeleted()
     QVERIFY(m_editor->textEdit()->isReadOnly());
 }
 
-// As in macOS Notes: the first delete says where deleted notes go.
+// The first delete says where deleted notes go.
 void tst_RecentlyDeleted::firstDeleteShowsNoticeOnce()
 {
     QSettings& settings = m_context->settings();

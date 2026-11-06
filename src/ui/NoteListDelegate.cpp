@@ -14,11 +14,11 @@ namespace notes::ui {
 namespace {
 
 constexpr int kHorizontalPadding = 16;
-// Notes start further right than their section header, as in macOS Notes, so
-// headers stand out. Headers and the hairlines between notes stay at
+// Notes start further right than their section header, so headers stand
+// out. Headers and the hairlines between notes stay at
 // kHorizontalPadding.
 constexpr int kNoteIndent = 14;
-constexpr int kVerticalPadding = 13; // roomy rows, as macOS Notes
+constexpr int kVerticalPadding = 13; // roomy rows
 constexpr int kLineGap = 5;
 constexpr int kIconSize = 14;
 constexpr int kIconGap = 4;

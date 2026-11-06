@@ -11,7 +11,7 @@ class QToolButton;
 
 namespace notes::ui {
 
-// The toolbar's Aa menu (Plan §3.2), as in macOS Notes: a row of buttons for
+// The toolbar's Aa menu (Plan §3.2): a row of buttons for
 // the inline formats (task 3.4), Bold, Italic, Underline and Strikethrough,
 // pressed when the selection has them; then the paragraph styles (task 3.2),
 // Title, Heading, Subheading, Body and Monospaced, and the lists (task 3.5),

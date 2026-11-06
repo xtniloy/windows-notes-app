@@ -180,8 +180,8 @@ private:
     // A kFragmentMime fragment at the cursor, its images under new uuids.
     bool insertFragment(const QByteArray& encoded);
 
-    // Enter in a heading: at its end a Body paragraph follows, as in macOS
-    // Notes; elsewhere it splits into two headings. True if handled.
+    // Enter in a heading: at its end a Body paragraph follows;
+    // elsewhere it splits into two headings. True if handled.
     bool headingKey(const QKeyEvent* event);
     // Enter in a code block: the next line is code too, empty lines
     // included. (Qt's own Enter on an empty line resets its format instead,

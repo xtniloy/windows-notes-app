@@ -188,7 +188,7 @@ void NoteTextEdit::setNoteBody(const QString& body, const QString& plainText,
     batch.beginEditBlock();
     editor::NoteFormat::load(body, plainText, *document());
     if (document()->isEmpty()) {
-        // A new (empty) note starts with its title, as in macOS Notes (task
+        // A new (empty) note starts with its title (task
         // 3.3): typing goes into a Title paragraph, and Enter then gives Body.
         QTextBlockFormat title;
         title.setHeadingLevel(editor::StyleManager::headingLevel(editor::ParagraphStyle::Title));
@@ -760,7 +760,7 @@ void NoteTextEdit::typeKey(QKeyEvent* event)
     QTextEdit::keyPressEvent(event);
     if (list) {
         // A separate undo step from typing the space: Ctrl+Z gives the marker
-        // back as text, as in macOS Notes.
+        // back as text.
         QTextCursor cursor = textCursor();
         cursor.beginEditBlock();
         cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::KeepAnchor);
@@ -1209,7 +1209,7 @@ void NoteTextEdit::paintCheckbox(QPainter& painter, const QRectF& box, bool chec
 {
     const qreal size = box.width();
     if (!checked) {
-        // An empty circle, as in macOS Notes.
+        // An empty circle.
         const qreal width = std::max(1.0, size / 12);
         painter.setPen(QPen(palette().color(QPalette::PlaceholderText), width));
         painter.setBrush(Qt::NoBrush);
@@ -1256,7 +1256,7 @@ void NoteTextEdit::mousePressEvent(QMouseEvent* event)
     if (event->button() == Qt::LeftButton && !isReadOnly()) {
         m_pressedCheckbox = checkboxAt(event->position());
         if (m_pressedCheckbox.isValid()) {
-            event->accept(); // the caret stays where it was, as in macOS Notes
+            event->accept(); // the caret stays where it was
             return;
         }
     }

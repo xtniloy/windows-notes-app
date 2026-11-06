@@ -44,7 +44,7 @@ QMenuBar#headerBar::item:pressed {
     background: ${separator};
 }
 
-/* Toolbar: macOS-style groups of joined buttons, a hairline under it. */
+/* Toolbar: groups of joined buttons, a hairline under it. */
 QToolBar#mainToolBar {
     background: ${window};
     border: none;

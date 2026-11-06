@@ -308,20 +308,20 @@ Keep exercises in a throwaway `sandbox/` folder (git-ignored or a separate repo)
 
 ### 1.9 Header bar and window chrome `M`
 
-*Added 2026-10-30 from UI feedback: on GNOME, Qt's Adwaita title bar ignores the app theme and draws no shadow, so the window blended into light backgrounds. Layout follows macOS Notes' grouped toolbar.*
+*Added 2026-10-30 from UI feedback: on GNOME, Qt's Adwaita title bar ignores the app theme and draws no shadow, so the window blended into light backgrounds. Layout uses a grouped toolbar.*
 
 - [x] Replace the system title bar: the menu row (File, Edit, Format, View, Help) is the header, with minimise / maximise / close at its right end; no title text *(`WindowChrome`: frameless, translucent window; the "Notes" title still names the window for the dock and Alt+Tab)*
 - [x] Drag empty header or toolbar space to move the window; double-click to maximise / restore
 - [x] Soft drop shadow and 1 px border around the window, removed when maximised or full screen; the shadow margin is the resize border *(Qt can't tell when GNOME snaps a window to half the screen, so snapped windows keep the margin)*
 - [x] Rounded window corners (12 px, as GNOME) *(an overlay above the content erases the corners outside the curve and draws the border along it; square when maximised)*
 - [x] Spacing per UI review: padding around the header row and toolbar, window buttons centred on the menu titles, search box as tall as the button groups, lighter shadow
-- [x] Second UI review: gap between the menu row and the toolbar buttons equal to the gap below them; window buttons at GNOME size (22 px, 14 px icons); roomier note list rows (more padding and line spacing, as macOS Notes)
+- [x] Second UI review: gap between the menu row and the toolbar buttons equal to the gap below them; window buttons at GNOME size (22 px, 14 px icons); roomier note list rows (more padding and line spacing)
 - [x] Third UI review: lighter accent `#F3BE33`; compact section headers in the note list; equal toolbar insets at both ends (QToolBar ignores its own side margins, so fixed spacers at each end); app logo (`resources/app/logo.svg`) as window icon and in About; a dark ring along the window's curved corners removed (the shadow was painted over the half-erased edge pixels instead of behind them)
-- [x] Note list, as macOS Notes: note rows indented 14 px past their section header ("Pinned", "Today", ...) so headers stand out; headers and the hairlines between notes keep their position
+- [x] Note list: note rows indented 14 px past their section header ("Pinned", "Today", ...) so headers stand out; headers and the hairlines between notes keep their position
 - [x] Bug fix (seen at 125 % display scale): thin light line under the window and at the corners, and a shadow that looked heavy. The shadow is now nested translucent rounded shapes (no seams, no unshaded strip under the window, lighter); the window edge is a faint translucent line instead of light grey; content widgets overhang the rounded edge by 1 px and the overlay trims them, so no background strip shows at fractional scales
-- [x] Toolbar buttons in joined, rounded groups as in macOS Notes: sidebar · list/gallery · delete/new note · format/checklist/table/attachment/lock · share; editing tools centred
+- [x] Toolbar buttons in joined, rounded groups: sidebar · list/gallery · delete/new note · format/checklist/table/attachment/lock · share; editing tools centred
 - [x] Search placeholder (magnifier + "Search") centred until the box is focused or has text
-- [x] Fourth UI review: New Note moved out of the delete/new note group to just left of the editing tools, apart from Delete, so reaching for one can't hit the other (as macOS Notes: trash over the note list, compose at the start of the editor tools). The first delete shows a notice, as macOS Notes: "Deleted notes are moved to the Recently Deleted folder", OK moves the note, Escape keeps it; shown once *(`TrashNoticeDialog`, remembered in QSettings `notes/trashNoticeShown`. The editing tools shift right by half the New Note button: a balancing spacer to keep them in place didn't fit the 760 px minimum window)*
+- [x] Fourth UI review: New Note moved out of the delete/new note group to just left of the editing tools, apart from Delete, so reaching for one can't hit the other (trash over the note list, compose at the start of the editor tools). The first delete shows a notice: "Deleted notes are moved to the Recently Deleted folder", OK moves the note, Escape keeps it; shown once *(`TrashNoticeDialog`, remembered in QSettings `notes/trashNoticeShown`. The editing tools shift right by half the New Note button: a balancing spacer to keep them in place didn't fit the 760 px minimum window)*
 
 **Tests**
 - `TC-UI-040` (UI) Window is frameless and translucent, with rounded corners; header row has the five menus and the window buttons on the right.
@@ -399,7 +399,7 @@ Record each in `docs/adr/`:
 - [x] `FolderRepository`: `create`, `rename`, `move(newParent)`, `softDelete`, `listTree`, `reorder` *(names are trimmed; `softDelete` tombstones the whole subtree and moves its notes to Recently Deleted, keeping their `folder_id` for restore. Errors carry a `DbError::Kind`: NotFound, InvalidArgument, Cycle, Protected)*
 - [x] Every change bumps `version`, sets `updated_at`, and sets `sync_state = 0` *(times from `IClock`; `reorder` only touches rows whose position changes)*
 - [x] Prevent cycles (moving a folder into its own descendant)
-- [x] Create default **Notes** folder on first run *(`ensureDefaultFolder()`, with the fixed UUID `d5cf1c5f-0bc7-419e-b2f2-096709ed4f5b` from ADR 0005; it can't be deleted, moved or renamed, as in macOS Notes. Called at startup by `AppContext::openDatabase()` since 2.8)*
+- [x] Create default **Notes** folder on first run *(`ensureDefaultFolder()`, with the fixed UUID `d5cf1c5f-0bc7-419e-b2f2-096709ed4f5b` from ADR 0005; it can't be deleted, moved or renamed. Called at startup by `AppContext::openDatabase()` since 2.8)*
 
 **Tests**
 - `TC-STO-007` (U) Create nested folders 3 levels deep → `listTree` returns the correct hierarchy.
@@ -546,9 +546,9 @@ Record each in `docs/adr/`:
 
 ### 3.2 Paragraph styles `M`
 
-- [x] `StyleManager` with Title, Heading, Subheading, Body, Monospaced (mapped to heading levels 1/2/3, none, and JetBrains Mono) *(`editor/StyleManager`. Fonts aren't stored (ADR 0006): headings get theirs from the style when a note loads: bold, at 1.75× / 1.4× / 1.15× the body size (19.25 / 15.4 / 12.65 pt under 11 pt). A heading's bold is the style's, so `NoteFormat` doesn't save it as the user's. Changing style takes back only what the old style added; the user's italic, colors and links stay. Levels 4–6 from pasted Markdown show as Subheading and keep their level. Enter at the end of a heading starts a Body paragraph, as in macOS Notes; elsewhere it splits the heading into two (Qt's own Enter dropped the level but kept the big font))*
+- [x] `StyleManager` with Title, Heading, Subheading, Body, Monospaced (mapped to heading levels 1/2/3, none, and JetBrains Mono) *(`editor/StyleManager`. Fonts aren't stored (ADR 0006): headings get theirs from the style when a note loads: bold, at 1.75× / 1.4× / 1.15× the body size (19.25 / 15.4 / 12.65 pt under 11 pt). A heading's bold is the style's, so `NoteFormat` doesn't save it as the user's. Changing style takes back only what the old style added; the user's italic, colors and links stay. Levels 4–6 from pasted Markdown show as Subheading and keep their level. Enter at the end of a heading starts a Body paragraph; elsewhere it splits the heading into two (Qt's own Enter dropped the level but kept the big font))*
 - [x] **Aa** Format popup menu (Plan §3.2) showing the current style checked *(`ui/FormatMenu`; the same actions head the menu bar's Format menu. Aa and the styles are disabled without an editable note: none selected, locked, or in Recently Deleted)*
-- [x] Shortcuts: `Ctrl+Shift+T` Title, `Ctrl+Shift+H` Heading, `Ctrl+Shift+J` Subheading, `Ctrl+Shift+B` Body *(mirrors macOS; check against Plan §3.2 table for conflicts)* *(no conflicts; also `Ctrl+Shift+M` Monospaced, as macOS)*
+- [x] Shortcuts: `Ctrl+Shift+T` Title, `Ctrl+Shift+H` Heading, `Ctrl+Shift+J` Subheading, `Ctrl+Shift+B` Body *(check against Plan §3.2 table for conflicts)* *(no conflicts; also `Ctrl+Shift+M` Monospaced)*
 - [x] Each style change is one undo step (`beginEditBlock`/`endEditBlock`) *(also across several selected paragraphs)*
 
 **Tests**
@@ -563,7 +563,7 @@ Record each in `docs/adr/`:
 
 - [x] The first block is always styled as Title when the note is new *(`NoteTextEdit::setNoteBody()`: an empty note opens with a Title paragraph, not as an edit (no undo step, no save). An existing note emptied and reopened starts with a title again)*
 - [x] Pressing Enter after the title switches the next block to Body *(done in 3.2 for every heading)*
-- [x] If the user deletes the first line, the new first line becomes the title (service re-derives on save) *(the note's name: `NoteText::title()` already takes the first non-empty line on every save. The new first line keeps its own style, as in macOS Notes)*
+- [x] If the user deletes the first line, the new first line becomes the title (service re-derives on save) *(the note's name: `NoteText::title()` already takes the first non-empty line on every save. The new first line keeps its own style)*
 
 **Tests**
 - `TC-EDT-006` (UI) New note, type "Groceries⏎Milk" → block 0 is Title, block 1 is Body, note title = "Groceries".
@@ -586,8 +586,8 @@ Record each in `docs/adr/`:
 
 ### 3.5 Lists `M`
 
-- [x] Bulleted, dashed, numbered lists from the Format menu *(with the paragraph styles in one pick-one group, as macOS Notes; `Ctrl+Shift+7/8/9`. An item's text is Body. A new item below a list of the same kind continues it; choosing another kind for an item changes its whole list; any other style takes it out. Qt has no dash marker: a dashed list has no Qt style plus our `NoteFormat::kDashedListProperty`, stored as `"dash"`, and `NoteTextEdit` draws the en dash where Qt would draw a bullet. Old `"square"` lists still load as squares)*
-- [x] Auto-format at line start: `- `, `* ` → list; `1. ` → numbered *(`- ` dashed, `* ` bulleted, as macOS. Only in Body paragraphs, not headings or Monospaced. Ctrl+Z gives the marker back as text)*
+- [x] Bulleted, dashed, numbered lists from the Format menu *(with the paragraph styles in one pick-one group; `Ctrl+Shift+7/8/9`. An item's text is Body. A new item below a list of the same kind continues it; choosing another kind for an item changes its whole list; any other style takes it out. Qt has no dash marker: a dashed list has no Qt style plus our `NoteFormat::kDashedListProperty`, stored as `"dash"`, and `NoteTextEdit` draws the en dash where Qt would draw a bullet. Old `"square"` lists still load as squares)*
+- [x] Auto-format at line start: `- `, `* ` → list; `1. ` → numbered *(`- ` dashed, `* ` bulleted. Only in Body paragraphs, not headings or Monospaced. Ctrl+Z gives the marker back as text)*
 - [x] `Tab` / `Shift+Tab` indent/outdent *(an item joins the nearest list above at its new level, so a new nested level numbers from 1; at most 8 levels; Shift+Tab at the top level leaves the list. Outside a list, Tab types a tab)*
 - [x] `Enter` on an empty item exits the list *(a nested empty item goes up a level first)*
 - [x] `Backspace` at the start of an item removes the bullet first *(the paragraph keeps its own indent rather than the list's)*
@@ -939,7 +939,7 @@ For beta testers who used Phase 2/3 builds.
 - [ ] Lock toolbar button toggles lock for the current note
 - [ ] Note list: lock icon + "Locked" instead of snippet (Plan §3.4)
 - [ ] Editor: lock screen with password field and hint button when locked
-- [ ] Unlocking one note unlocks all locked notes for the session (macOS behavior)
+- [ ] Unlocking one note unlocks all locked notes for the session
 
 **Tests**
 - `TC-UI-031` (UI) Lock current note → list row shows 🔒 and "Locked"; editor shows lock screen.
@@ -1479,7 +1479,7 @@ Record decisions in `docs/adr/0007-sync-design.md`:
 
 Maps to **Plan §16 Definition of Done**:
 
-- [ ] Three-pane UI matching macOS Notes layout and workflow → Phases 1–3, 7–8
+- [ ] Three-pane UI with the planned layout and workflow → Phases 1–3, 7–8
 - [ ] All P0 and P1 features working → [traceability table](#feature--task-traceability) fully ticked
 - [ ] DB encrypted at rest; copied file unreadable → `TC-ENC-001`, `TC-SEC-005`
 - [ ] Locked notes require password; auto-relock works → `TC-LCK-004`, `TC-LCK-009`, `TC-LCK-011`

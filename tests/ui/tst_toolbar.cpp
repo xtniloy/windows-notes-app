@@ -147,7 +147,7 @@ void tst_Toolbar::actionOrderMatchesPlan()
     QCOMPARE(buttons, expected);
 }
 
-// TC-UI-043: joined button groups as in macOS Notes (task 1.9).
+// TC-UI-043: joined button groups (task 1.9).
 void tst_Toolbar::buttonsAreGrouped()
 {
     const auto window = showActiveWindow();

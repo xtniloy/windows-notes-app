@@ -29,7 +29,7 @@ struct DateSection
     bool operator==(const DateSection&) const = default;
 };
 
-// Groups note timestamps the way macOS Notes does. Days are calendar days in
+// Groups note timestamps into date sections. Days are calendar days in
 // `zone` (the user's local time by default), so "Yesterday" starts at midnight,
 // not 24 hours ago. Timestamps are UTC milliseconds since the epoch.
 class DateGrouping

@@ -1,7 +1,7 @@
 # Project Plan: Secure Notes App for Ubuntu
 
 > **Working name:** `NotesApp` (replace with your own brand name)
-> **Goal:** A native Ubuntu notes app that matches the macOS Notes app in layout, workflow and features, while being fast, small, and secure by default.
+> **Goal:** A native Ubuntu notes app with a familiar three-pane layout, workflow and features, while being fast, small, and secure by default.
 > **Stack:** C++20 · Qt 6 Widgets · SQLCipher · libsodium · QtKeychain · Google Drive (appDataFolder)
 
 ---
@@ -11,7 +11,7 @@
 1. [Vision & Principles](#1-vision--principles)
 2. [Design Rules (What to Copy, What Not To)](#2-design-rules-what-to-copy-what-not-to)
 3. [UI Specification](#3-ui-specification)
-4. [Feature List (macOS Notes Parity)](#4-feature-list-macos-notes-parity)
+4. [Feature List](#4-feature-list)
 5. [Technical Stack](#5-technical-stack)
 6. [Architecture](#6-architecture)
 7. [Database Design](#7-database-design)
@@ -29,13 +29,13 @@
 
 ## 1. Vision & Principles
 
-**Vision:** The notes app Ubuntu users wish they had: as simple as macOS Notes, private enough for passwords and personal records, and fast enough that it never feels like it loads.
+**Vision:** The notes app Ubuntu users wish they had: as simple as a pocket notebook, private enough for passwords and personal records, and fast enough that it never feels like it loads.
 
 **Principles**
 
 | Principle | Meaning in practice |
 |---|---|
-| **Familiar** | Anyone who has used macOS Notes knows how to use it in 10 seconds. |
+| **Familiar** | Anyone who has used a notes app knows how to use it in 10 seconds. |
 | **Private by default** | Every note is encrypted on disk and before upload. No setting to turn it on; it is always on. |
 | **Instant** | Start, open, type, and search without visible delay. |
 | **Small** | A tiny `.deb`, low RAM, no bundled browser engine. |
@@ -45,19 +45,19 @@
 
 ## 2. Design Rules (What to Copy, What Not To)
 
-The goal is **the same layout, workflow and features** as macOS Notes. Copy the *behavior*; create your *own* visual identity.
+The goal is **a familiar layout, workflow and feature set**. Follow common conventions for *behavior*; create your *own* visual identity.
 
-**✅ Copy freely (functionality and layout)**
+**✅ Follow freely (functionality and layout)**
 - Three-pane layout: folders → note list → editor
 - Toolbar actions and their order
 - Keyboard shortcuts and behaviors (e.g., first line becomes the title)
 - Features: checklists, tables, pinning, locking, gallery view, search, etc.
 
-**❌ Do not copy (Apple's protected assets)**
-- The name "Notes" with Apple branding, Apple logos, or the Notes app icon
-- **SF Pro font** (its license only permits use on Apple platforms) → use **Inter** instead
-- **SF Symbols** icons → use **Lucide** or **Phosphor** (open-source, MIT-licensed)
-- Apple's exact yellow color, textures, and screenshots → choose your own accent color
+**❌ Do not copy (other vendors' protected assets)**
+- Another vendor's branding, logos, or app icons
+- Proprietary system fonts (licensed only for their own platforms) → use **Inter** instead
+- Proprietary icon sets → use **Lucide** or **Phosphor** (open-source, MIT-licensed)
+- Another app's exact colors, textures, and screenshots → choose your own accent color
 
 ---
 
@@ -133,7 +133,7 @@ The window draws its own frame (rounded corners, soft shadow) with no system tit
 
 - Grouped by date: **Pinned**, Today, Yesterday, Previous 7 Days, Previous 30 Days, months, years
 - Each row: **title** (bold), time + first line of preview, thumbnail if note has an image
-- Locked notes show 🔒 and "Locked" instead of a preview (title stays visible, like macOS)
+- Locked notes show 🔒 and "Locked" instead of a preview (title stays visible)
 - Sort options: Date Edited / Date Created / Title
 - **Gallery view:** grid of note cards with previews
 - Right-click: Pin, Lock, Move to, Duplicate, Delete
@@ -165,7 +165,7 @@ The window draws its own frame (rounded corners, soft shadow) with no system tit
 
 ---
 
-## 4. Feature List (macOS Notes Parity)
+## 4. Feature List
 
 Priority: **P0** = MVP, **P1** = v1.0, **P2** = after v1.0
 
@@ -421,7 +421,7 @@ CREATE INDEX idx_notes_sync    ON notes(sync_state);
 5. If keyring is unavailable, ask the user for a startup password instead (fallback mode).
 
 ### 8.4 Layer 2: Locked Notes
-1. User sets one **notes password** (same model as macOS Notes).
+1. User sets one **notes password** (one password for all locked notes).
 2. Derive Lock Key: `crypto_pwhash` (Argon2id, `OPSLIMIT_MODERATE`, `MEMLIMIT_MODERATE`, random 16-byte salt stored in `meta`).
 3. Each locked note gets a random note key; content encrypted with `crypto_aead_xchacha20poly1305_ietf_encrypt`.
 4. Note key wrapped by Lock Key and stored in `wrapped_key`.
@@ -430,7 +430,7 @@ CREATE INDEX idx_notes_sync    ON notes(sync_state);
 7. Unlocked content kept in memory only, cleared with `sodium_memzero` on relock.
 8. Auto-relock after 5 minutes idle (configurable), on screen lock, and on app close.
 9. Failed attempts: exponential delay (1s, 2s, 4s…).
-10. Optional password hint (like macOS).
+10. Optional password hint.
 
 ### 8.5 Memory & Runtime Hygiene
 - Keys held in `sodium_malloc` buffers (guarded, `mlock`ed, not swapped to disk)
@@ -640,14 +640,14 @@ Estimates assume **one developer learning C++/Qt** while building. Experienced Q
 | Google OAuth verification delays release | Medium | Start verification early (Phase 9), prepare privacy policy in advance |
 | Sync conflicts lose data | High | Never overwrite silently; always keep a conflicted copy |
 | Keyring unavailable on some systems | Medium | Fallback to a startup password |
-| Design too close to Apple's assets | Medium | Own name, icons (Lucide/Phosphor), fonts (Inter), colors |
+| Design too close to another app's assets | Medium | Own name, icons (Lucide/Phosphor), fonts (Inter), colors |
 | Scope creep (P2 features) | Medium | Freeze scope per milestone; P2 only after v1.0 |
 
 ---
 
 ## 16. Definition of Done (v1.0)
 
-- [ ] Three-pane UI matching macOS Notes layout and workflow
+- [ ] Three-pane UI with the planned layout and workflow
 - [ ] All **P0** and **P1** features working
 - [ ] Database encrypted at rest; file unreadable when copied elsewhere
 - [ ] Locked notes require password; auto-relock works

@@ -7,7 +7,7 @@
 namespace notes::services {
 
 // How a note's title and list snippet come from its plain text (task 2.7). The
-// title is not stored separately by the user: like macOS Notes, the first line
+// title is not stored separately by the user: the first line
 // is the name.
 class NoteText
 {

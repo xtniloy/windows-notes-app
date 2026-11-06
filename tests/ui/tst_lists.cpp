@@ -211,7 +211,7 @@ void tst_Lists::enterTwiceEndsList()
 }
 
 // TC-EDT-013
-// Enter in every kind of list, as Google Docs does it (and macOS Notes):
+// Enter in every kind of list, as Google Docs does it:
 // an empty item is never left behind and never added twice.
 void tst_Lists::enterFlowLikeGoogleDocs_data()
 {
